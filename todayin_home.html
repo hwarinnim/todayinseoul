@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Gaegu&family=Noto+Serif+HK&family=Noto+Sans&family=Zen+Old+Mincho&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Stack+Sans+Headline:wght@200..700&display=swap"
+        rel="stylesheet">
+    <title>Today In Seoul</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope';
+            background-color: #fff;
+            color: #222;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-family: 'Manrope';
+            font-size: 2.5rem;
+            color: #000;
+        }
+
+        .date {
+            font-family: 'Manrope';
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search {
+            flex-shrink: 0;
+            font-family: 'Manrope';
+            font-size: 0.9rem;
+            border-bottom: 1px solid #000;
+        }
+
+        .search input {
+            padding: 6px 10px;
+            border-radius: 0px;
+            border: 0px;
+            font-family: 'Manrope';
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .menu-toggle {
+            font-size: 1.6rem;
+            cursor: pointer;
+            font-family: 'Manrope';
+            padding: 4px 8px;
+            border-radius: 0px;
+            border: 0px;
+            margin-left: 12px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            padding: 5px 0;
+            z-index: 1001;
+            font-family: 'Manrope';
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 25px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f37420;
+            color: #fff;
+            border-radius: 15px;
+        }
+
+
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .column {
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .left {
+            width: 20%;
+            border-right: 0px solid #ddd;
+            background-color: #fff
+        }
+
+        .center {
+            width: 60%;
+        }
+
+        .right {
+            width: 20%;
+            border-left: 0px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: #fff
+        }
+
+        .sort-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #000;
+            font-family: 'Manrope';
+        }
+
+        .sort-bar select {
+            padding: 6px 15px;
+            border: 1px solid #000;
+            border-radius: 15px;
+            font-family: 'Manrope';
+        }
+
+        .event-card {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 20px;
+        }
+
+        .event-card img {
+            width: 120px;
+            height: 160px;
+            border-radius: 6px;
+            border: 1px solid #000;
+            background-color: #fff;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Fallback for broken images */
+        .event-card img:before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-details h3 {
+            margin-bottom: 6px;
+            font-size: 1.15rem;
+            font-family: 'Manrope';
+            color: #b73f74;
+        }
+
+        .event-details a {
+            color: #b73f74;
+            text-decoration: none;
+        }
+
+        .event-details a:hover {
+            text-decoration: underline;
+        }
+
+        .event-meta {
+            font-size: 0.9rem;
+            color: #007190;
+            margin-bottom: 8px;
+        }
+
+        .event-description {
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .calendar {
+            width: 100%;
+            border: 1px solid #000;
+            border-radius: 15px;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-family: 'Manrope';
+            background-color: #fff;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-family: 'Manrope';
+        }
+
+        .calendar-header .month-year {
+
+            font-family: 'Manrope';
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .calendar-day {
+            padding: 6px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Manrope';
+            font-size: 0.7rem;
+        }
+
+        .calendar-day:hover {
+            background-color: #f0f0f0;
+        }
+
+        .filters {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: 'Manrope';
+        }
+
+        .filters label {
+
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .filters select,
+        .filters button {
+            padding: 6px 15px;
+            border: 1px solid #000;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-family: 'Manrope';
+        }
+
+        .filters .checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filters-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin: 10px 0 4px;
+            font-family: 'Manrope';
+        }
+
+        .filters input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            background-color: #fff;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .filters input[type="checkbox"]:checked {
+            background-color: #f37420;
+            border-color: #f37420;
+        }
+
+        .filters input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 4px;
+            height: 8px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            display: none;
+        }
+
+        .filters input[type="checkbox"]:checked::after {
+            display: block;
+        }
+
+        label {
+            cursor: pointer;
+        }
+
+        .filters .buttons button {
+            background-color: #007190;
+            color: #fff;
+            font-family: 'Manrope';
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 15px;
+            align-items: left;
+            justify-items: left;
+        }
+
+        .filters .buttons button:hover {
+            background-color: #f37420;
+            color: #fff;
+        }
+
+        .filters .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+
+
+        .sidebar-box {
+            border: 1px solid #000;
+            border-radius: 15px;
+            padding: 12px;
+            background-color: #fff;
+        }
+
+        .sidebar-box h4 {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #007190;
+            font-family: 'Manrope';
+        }
+
+        .ranking-item,
+        .featured-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-family: 'Manrope';
+        }
+
+        .ranking-number {
+            font-weight: bold;
+            font-size: 0.9rem;
+            width: 18px;
+            color: #f37420;
+            font-family: 'Manrope', monospace;
+        }
+
+        .buttons {
+            align-items: left;
+        }
+
+        .sidebar-poster {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid #000;
+            object-fit: cover;
+            background-color: #fff;
+            display: block;
+        }
+
+        .sidebar-poster:before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .sidebar-event-name {
+            font-size: 0.85rem;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .sidebar-event-name:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #333;
+            font-family: 'Manrope';
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">TODAY IN <span style="color: #f37420">SEOUL</span></div>
+        <div class="date">
+            <span>&lt;</span>
+            <br>
+            <span id="current-date"></span>
+            <br>
+            <span>&gt;</span>
+        </div>
+
+        <button id="todayButton" style="
+            font-family: 'Manrope';
+            font-size: 0.9rem;
+            background-color: #fff;
+            border: 1px solid #f37420;
+            color: #f37420;
+            border-radius: 15px;
+            padding: 4px 15px;
+            margin-left: 12px;
+            cursor: pointer;
+        ">Today</button>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Submit Event</a>
+            <a href="#">FAQ</a>
+        </div>
+
+    </header>
+
+    <div class="main">
+        <div class="column left">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <span id="prevMonth" style="cursor: pointer;">&lt;</span>
+                    <span class="month-year" id="monthYear"></span>
+                    <span id="nextMonth" style="cursor: pointer;">&gt;</span>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+
+            <div class="search" style="margin: 20px 0;">
+                <input type="text" placeholder="Search events..." />
+            </div>
+
+
+            <div class="filters">
+                <div class="filters-title">Refine Search</div>
+
+                <div>
+                    <select id="area">
+                        <option>All of Seoul</option>
+                        <option>Dongjak-gu</option>
+                        <option>Gangnam-gu</option>
+                        <option>Gwangjin-gu</option>
+                        <option>Gwanak-gu</option>
+                        <option>Jongno-gu</option>
+                        <option>Jung-gu</option>
+                        <option>Mapo-gu</option>
+                        <option>Seocho-gu</option>
+                        <option>Seongdong-gu</option>
+                        <option>Songpa-gu</option>
+                        <option>Yongsan-gu</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select id="price">
+                        <option>All Prices</option>
+                        <option>Free</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select id="status">
+                        <option>Any status</option>
+                        <option>Open now</option>
+                        <option>Only today</option>
+                    </select>
+                </div>
+                <br>
+
+                <div>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" checked> All categories</label>
+                        <label><input type="checkbox"> Art & Exhibits</label>
+                        <label><input type="checkbox"> Music & Performances</label>
+                        <label><input type="checkbox"> Film & Screenings</label>
+                        <label><input type="checkbox"> Markets & Pop-Ups</label>
+                        <label><input type="checkbox"> Food & Drink</label>
+                        <label><input type="checkbox"> Books & Culture</label>
+                        <label><input type="checkbox"> Tech & Games</label>
+                        <label><input type="checkbox"> Fairs & Festivals</label>
+                        <label><input type="checkbox"> Workshops & DIY</label>
+                        <label><input type="checkbox"> Outdoors & Wellness</label>
+                        <label><input type="checkbox"> Family Friendly</label>
+                    </div>
+                </div>
+                <br>
+
+                <div class="buttons">
+                    <button>Apply Filters</button>
+                </div>
+                <div class="buttons">
+                    <button>Reset Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="column center">
+            <a id="top"></a>
+            <div class="sort-bar">
+                <select>
+                    <option value="popular">Sort by Popularity</option>
+                    <option value="name">Sort by Name</option>
+                    <option value="new">Sort by Newest</option>
+                    <option value="start">Sort by Start Time</option>
+                    <option value="end">Sort by End Time</option>
+                    <option value="end">Sort by End Date</option>
+                </select>
+            </div>
+
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+1" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Midnight Flea Market</a></h3>
+                    <div class="event-meta">Dongdaemun Design Plaza • Nov 30–Dec 1 • Free</div>
+                    <div class="event-description">
+                        A lively night market featuring handmade goods, indie fashion brands, and street food. Perfect
+                        for a cozy late-night stroll...
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+2" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Indie Music Fest Seoul</a></h3>
+                    <div class="event-meta">Hongdae Soundground • Nov 30 • ₩15,000</div>
+                    <div class="event-description">
+                        Join local and international indie artists for a night of raw music, creative expression, and
+                        community vibes...
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+3" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Winter Art Fair</a></h3>
+                    <div class="event-meta">COEX Hall B • Nov 29–Dec 3 • ₩5,000</div>
+                    <div class="event-description">
+                        Explore contemporary art, installations, and zines by Korean and international creators.
+                        Discover the perfect piece to take home...
+
+                    </div>
+                </div>
+            </div>
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+1" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Midnight Flea Market</a></h3>
+                    <div class="event-meta">Dongdaemun Design Plaza • Nov 30–Dec 1 • Free</div>
+                    <div class="event-description">
+                        A lively night market featuring handmade goods, indie fashion brands, and street food. Perfect
+                        for a cozy late-night stroll...
+
+                    </div>
+                </div>
+            </div>
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+1" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Midnight Flea Market</a></h3>
+                    <div class="event-meta">Dongdaemun Design Plaza • Nov 30–Dec 1 • Free</div>
+                    <div class="event-description">
+                        A lively night market featuring handmade goods, indie fashion brands, and street food. Perfect
+                        for a cozy late-night stroll...
+
+                    </div>
+                </div>
+            </div>
+            <div class="event-card">
+                <a href="#"><img src="https://via.placeholder.com/120x160.png?text=Poster+1" alt="Event Poster"></a>
+                <div class="event-details">
+                    <h3><a href="#">Midnight Flea Market</a></h3>
+                    <div class="event-meta">Dongdaemun Design Plaza • Nov 30–Dec 1 • Free</div>
+                    <div class="event-description">
+                        A lively night market featuring handmade goods, indie fashion brands, and street food. Perfect
+                        for a cozy late-night stroll...
+
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="#top" style="
+                    font-family: 'Manrope';
+                    font-size: 0.9rem;
+                    color: #007190;
+                    text-decoration: none;
+                    padding-bottom: 2px;
+                ">↑ Back to Top</a>
+            </div>
+
+        </div>
+
+        <div class="column right">
+            <div class="sidebar-box">
+                <h4>Top 5 Popular Events</h4>
+                <div class="ranking-item">
+                    <span class="ranking-number">1</span>
+                    <img src="https://via.placeholder.com/40x55.png?text=1" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Flea Market</a>
+                </div>
+                <div class="ranking-item">
+                    <span class="ranking-number">2</span>
+                    <img src="https://via.placeholder.com/40x55.png?text=2" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Winter Art Fair</a>
+                </div>
+                <div class="ranking-item">
+                    <span class="ranking-number">3</span>
+                    <img src="https://via.placeholder.com/40x55.png?text=3" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Indie Music Fest</a>
+                </div>
+                <div class="ranking-item">
+                    <span class="ranking-number">4</span>
+                    <img src="https://via.placeholder.com/40x55.png?text=4" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Han River Picnic</a>
+                </div>
+                <div class="ranking-item">
+                    <span class="ranking-number">5</span>
+                    <img src="https://via.placeholder.com/40x55.png?text=5" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Book Bazaar</a>
+                </div>
+            </div>
+            <div class="sidebar-box">
+                <h4>Featured Events</h4>
+                <div class="featured-item">
+                    <img src="https://via.placeholder.com/40x55.png?text=F1" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Night Museum</a>
+                </div>
+                <div class="featured-item">
+                    <img src="https://via.placeholder.com/40x55.png?text=F2" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Art Pop-up Cafe</a>
+                </div>
+                <div class="featured-item">
+                    <img src="https://via.placeholder.com/40x55.png?text=F3" class="sidebar-poster">
+                    <a href="#" class="sidebar-event-name">Food Truck Fest</a>
+                </div>
+            </div>
+            <div class="sticky-footer" style="
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                font-family: 'Manrope';
+                font-size: 0.75rem;
+                color: #333;
+                padding: 10px;
+            ">
+                Terms • Privacy Policy<br>
+                © 2025 Today In. All rights reserved.
+            </div>
+        </div>
+    </div>
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        function toggleMenu() {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        document.addEventListener('click', function (event) {
+            const isClickInside = menuToggle.contains(event.target) || dropdownMenu.contains(event.target);
+            if (!isClickInside) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // SET CURRENT DATE IN HEADER
+        const currentDateSpan = document.getElementById('current-date');
+        const now = new Date();
+        const headerOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateSpan.textContent = now.toLocaleDateString('en-US', headerOptions);
+
+        // GENERATE CALENDAR
+        const monthYear = document.getElementById('monthYear');
+        const calendarGrid = document.getElementById('calendar-grid');
+
+        const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+
+        let currentDate = new Date();
+
+        function generateCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const today = new Date();
+
+            document.getElementById("monthYear").textContent = date.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric'
+            });
+
+            const calendarGrid = document.getElementById("calendar-grid");
+            calendarGrid.innerHTML = "";
+
+            const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            daysOfWeek.forEach(day => {
+                const dayElem = document.createElement("div");
+                dayElem.className = "calendar-day";
+                dayElem.style.fontWeight = "bold";
+                dayElem.textContent = day;
+                calendarGrid.appendChild(dayElem);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const blank = document.createElement("div");
+                blank.className = "calendar-day";
+                calendarGrid.appendChild(blank);
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement("div");
+                day.className = "calendar-day";
+                day.textContent = i;
+
+                // Highlight today
+                if (
+                    i === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()
+                ) {
+                    day.style.border = '1px solid #f37420';
+                    day.style.color = '#000';
+                }
+
+                calendarGrid.appendChild(day);
+            }
+        }
+
+        // ⬅️ ➡️ Event listeners for month switching
+        document.getElementById("prevMonth").addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar(currentDate);
+        });
+
+        document.getElementById("nextMonth").addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar(currentDate);
+        });
+
+        // Initialize calendar
+        generateCalendar(currentDate);
+
+        // 🔁 Today button logic
+        document.getElementById("todayButton").addEventListener("click", () => {
+            currentDate = new Date(); // reset to today
+            generateCalendar(currentDate);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Gaegu&family=Noto+Serif+HK&family=Noto+Sans&family=Zen+Old+Mincho&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Stack+Sans+Headline:wght@200..700&display=swap"
+        rel="stylesheet">
+    <title>Today In Seoul</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope';
+            background-color: #fff;
+            color: #222;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-family: 'Manrope';
+            font-size: 2.5rem;
+            color: #000;
+        }
+
+        .date {
+            font-family: 'Manrope';
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .menu-toggle {
+            font-size: 1.6rem;
+            cursor: pointer;
+            font-family: 'Manrope';
+            padding: 4px 8px;
+            border-radius: 0px;
+            border: 0px;
+            margin-left: 12px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            padding: 5px 0;
+            z-index: 1001;
+            font-family: 'Manrope';
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 25px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f37420;
+            color: #fff;
+            border-radius: 15px;
+        }
+
+
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .column {
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .left {
+            width: 20%;
+            border-right: 0px solid #ddd;
+            background-color: #fff
+        }
+
+        .center {
+            width: 60%;
+        }
+
+        .right {
+            width: 20%;
+            border-left: 0px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: #fff
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #333;
+            font-family: 'Manrope';
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">TODAY IN <span style="color: #f37420">SEOUL</span></div>
+        <div class="date">
+            <span>&lt;</span>
+            <br>
+            <span id="current-date"></span>
+            <br>
+            <span>&gt;</span>
+        </div>
+
+        <button id="todayButton" style="
+            font-family: 'Manrope';
+            font-size: 0.9rem;
+            background-color: #fff;
+            border: 1px solid #f37420;
+            color: #f37420;
+            border-radius: 15px;
+            padding: 4px 15px;
+            margin-left: 12px;
+            cursor: pointer;
+        ">Today</button>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Submit Event</a>
+            <a href="#">FAQ</a>
+        </div>
+
+    </header>
+
+    <div class="main">
+        <div class="column left">
+
+        </div>
+
+        <div class="column center">
+            <a id="top"></a>
+
+            <div class="about-section" style="max-width: 700px; margin: 40px auto; padding: 20px;">
+                <h1 style="
+                    font-family: 'Manrope';
+                    font-weight: 500;
+                    font-size: 2rem;
+                    margin-bottom: 20px;
+                    color: #b73f74;
+                    border-bottom: 1px solid #000;
+                    padding-bottom: 10px;
+                ">Submit an Event</h1>
+                <br>
+
+                <p style="
+                    font-family: 'Manrope';
+                    font-size: 1rem;
+                    line-height: 1.6;
+                    color: #333;
+                    margin-bottom: 20px;
+                ">
+                    We welcome submissions for public events happening in or around
+                    Seoul—markets, exhibitions, pop-ups, concerts,
+                    performances, workshops, festivals, and more. If it’s open to the public
+                    and happening on a specific day, it belongs
+                    here.
+                    <br><br>
+                    Please fill out the form below with as much detail as possible.
+                    All submissions are reviewed before being posted.
+                    You’ll receive a confirmation once it’s live.
+                </p>
+
+                <p style="
+                    font-family: 'Manrope';
+                    font-size: 1.3rem;
+                    line-height: 1.6;
+                    color: #007190;
+                ">
+                    Event Submission Form
+                </p>
+
+                <form action="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/formResponse" method="POST"
+                    target="_blank"
+                    style="margin-top: 20px; display: flex; flex-direction: column; gap: 20px; font-family: 'Manrope'; max-width: 700px;">
+
+                    <label>
+                        Event Name*<br>
+                        <input type="text" name="entry.YOUR_EVENT_NAME_ID" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                        <small>The title that will appear in listings.</small>
+                    </label>
+
+                    <label>
+                        Event Date(s)*<br>
+                        <input type="text" name="entry.YOUR_DATE_ID" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                        <small>Include start and end if it runs for multiple days.</small>
+                    </label>
+
+                    <label>
+                        Start Time / End Time*<br>
+                        <input type="text" name="entry.YOUR_TIME_ID" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                    </label>
+
+                    <label>
+                        Location / Address*<br>
+                        <input type="text" name="entry.YOUR_LOCATION_ID" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                        <small>Name of venue or neighborhood, plus full address if available.</small>
+                    </label>
+
+                    <label>
+                        Category*<br>
+                        <small>You can select multiple categories.</small>
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Art"> Art &
+                                Exhibits</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Food"> Food &
+                                Drink</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Music"> Music &
+                                Performances</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Markets"> Markets &
+                                Pop-Ups</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Theater"> Theater &
+                                Screenings</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Outdoors"> Outdoors &
+                                Wellness</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Books"> Books &
+                                Culture</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Tech"> Tech &
+                                Games</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Fairs"> Fairs &
+                                Festivals</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Workshops"> Workshops &
+                                DIY</label>
+                            <label><input type="checkbox" name="entry.YOUR_CATEGORY_ID" value="Family"> Family
+                                Friendly</label>
+                        </div>
+                    </label>
+
+
+                    <label>
+                        Description*<br>
+                        <textarea name="entry.YOUR_DESCRIPTION_ID" rows="4" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;"></textarea>
+                        <small>A short, clear description of the event—what it is, who it’s for, what to expect.</small>
+                    </label>
+
+                    <label>
+                        Official Link or Source*<br>
+                        <input type="url" name="entry.YOUR_LINK_ID" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                        <small>URL to the event’s original page, social media post, or ticket site.</small>
+                    </label>
+
+                    <button type="submit" style="
+                    background-color: #007190;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 15px;
+                    font-family: 'Manrope';
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    align-self: flex-start;
+                    " onmouseover="this.style.backgroundColor='#f37420'"
+                        onmouseout="this.style.backgroundColor='#007190'; this.style.boxShadow='none'">
+                        Submit Event</button>
+                </form>
+
+
+            </div>
+
+        </div>
+
+        <div class="column right">
+
+            <div class="sticky-footer" style="
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                font-family: 'Manrope';
+                font-size: 0.75rem;
+                color: #333;
+                padding: 10px;
+            ">
+                Terms • Privacy Policy<br>
+                © 2025 Today In. All rights reserved.
+            </div>
+
+        </div>
+    </div>
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        function toggleMenu() {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        document.addEventListener('click', function (event) {
+            const isClickInside = menuToggle.contains(event.target) || dropdownMenu.contains(event.target);
+            if (!isClickInside) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // SET CURRENT DATE IN HEADER
+        const currentDateSpan = document.getElementById('current-date');
+        const now = new Date();
+        const headerOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateSpan.textContent = now.toLocaleDateString('en-US', headerOptions);
+
+
+        // 🔁 Today button logic
+        document.getElementById("todayButton").addEventListener("click", () => {
+            currentDate = new Date(); // reset to today
+            generateCalendar(currentDate);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+
+
+    </script>
+
+
+</body>
+
+</html>
